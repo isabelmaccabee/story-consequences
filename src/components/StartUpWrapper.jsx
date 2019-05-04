@@ -1,11 +1,12 @@
 import React from "react";
+import StartScreen from "./StartScreen";
 
 const StartUpWrapper = ({ gameToken, playerNum, children }) => {
   if (gameToken && playerNum) return children;
   else
     return (
       <div>
-        <p>Need token and playerNum</p>
+        <StartScreen />{" "}
       </div>
     );
 };
