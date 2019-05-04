@@ -27,6 +27,8 @@ class GameJoin extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    // makes request to check there is a game, and be assigned (or choose) 'position' number
+    // update app state with token and position
   };
 }
 

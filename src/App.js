@@ -6,14 +6,14 @@ import WaitingArea from "./components/WaitingArea";
 class App extends Component {
   state = {
     gameToken: "iExist"
-    // playerNum: "iExistToo"
+    // userPosition: "iExistToo"
   };
 
   render() {
-    const { gameToken, playerNum } = this.state;
+    const { gameToken, userPosition } = this.state;
     return (
       <div>
-        <StartUpWrapper gameToken={gameToken} playerNum={playerNum}>
+        <StartUpWrapper gameToken={gameToken} userPosition={userPosition}>
           <div className="App">
             <h1>Story Consequences</h1>
             <Router>
