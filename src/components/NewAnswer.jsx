@@ -34,7 +34,7 @@ class NewAnswer extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log("submitted answer");
+    this.props.advanceTurn();
   };
 }
 

@@ -7,12 +7,14 @@ import PlayScreen from "./components/PlayScreen";
 class App extends Component {
   state = {
     gameToken: "iExist",
-    numOfPlayers: null,
-    userPosition: "iExistToo"
+    // numOfPlayers: null,
+    numOfPlayers: 3,
+    // userPosition: "iExistToo"
+    userPosition: 1
   };
 
   render() {
-    const { gameToken, userPosition } = this.state;
+    const { gameToken, userPosition, numOfPlayers } = this.state;
     return (
       <div>
         <StartUpWrapper
@@ -24,7 +26,11 @@ class App extends Component {
             <h1>Story Consequences</h1>
             <Router>
               <WaitingArea path="/waiting-area" />
-              <PlayScreen path="/game-play" />
+              <PlayScreen
+                path="/game-play"
+                userPosition={userPosition}
+                numOfPlayers={numOfPlayers}
+              />
             </Router>
           </div>
         </StartUpWrapper>
