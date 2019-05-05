@@ -1,11 +1,13 @@
 #startPage {
-  background-color: rgb(163, 163, 223);
+  background-color: #f5f5f5;
   display: grid;
   grid-template: 1fr 4fr 4fr/ 1fr;
+  padding: 10px;
   grid-template-areas:
     "header"
     "topHalf"
     "bottomHalf";
+  box-shadow: 0 0 30px;
 }
 
 .header {
@@ -18,4 +20,8 @@
 
 .topHalf {
   grid-area: topHalf;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 20px;
 }
