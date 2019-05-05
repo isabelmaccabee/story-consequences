@@ -1,0 +1,41 @@
+import React, { Component } from "react";
+import DrawCanvas from "./DrawCanvas";
+
+class NewAnswer extends Component {
+  state = {
+    textInput: "",
+    drawInput: ""
+  };
+
+  render() {
+    const { turnNum } = this.props;
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          {turnNum % 2 !== 0 ? (
+            <DrawCanvas updateDrawInput={this.updateDrawInput} />
+          ) : (
+            <input id="textInput" type="text" onChange={this.handleChange} />
+          )}
+          <button type="submit">Send your answer!</button>
+        </form>
+      </div>
+    );
+  }
+
+  updateDrawInput = drawInput => {
+    this.setState({ drawInput });
+  };
+
+  handleChange = e => {
+    const { id, value } = e.target;
+    this.setState({ [id]: value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.advanceTurn();
+  };
+}
+
+export default NewAnswer;

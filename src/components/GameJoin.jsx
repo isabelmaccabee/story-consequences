@@ -31,8 +31,8 @@ class GameJoin extends Component {
     // update app state with token and position
     if (this.state.tokenInput === "123456") {
       const tempToken = this.state.tokenInput;
-      const playerCount = 2;
-      const position = 2;
+      const playerCount = 4;
+      const position = 3;
       this.props.addGameConfigs(tempToken, playerCount, position);
     } else {
       console.log("wrong token");
