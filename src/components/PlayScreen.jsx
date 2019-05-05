@@ -13,8 +13,10 @@ class PlayScreen extends Component {
     const { turnNum, currentThread } = this.state;
     console.log(this.state);
     return (
-      <div>
-        {currentThread && <PrevAnswer currentThread={currentThread} />}
+      <div className="main">
+        {currentThread && (
+          <PrevAnswer currentThread={currentThread} turnNum={turnNum} />
+        )}
         <NewAnswer turnNum={turnNum} advanceTurn={this.advanceTurn} />
       </div>
     );

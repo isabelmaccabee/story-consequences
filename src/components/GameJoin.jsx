@@ -8,16 +8,18 @@ class GameJoin extends Component {
     const { tokenInput } = this.state;
     console.log(this.state);
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor="tokenInput">Insert token here:</label>
-        <input
-          id="tokenInput"
-          onChange={this.handleChange}
-          value={tokenInput}
-          type="text"
-        />
-        <button type="submit">Join game</button>
-      </form>
+      <div className="bottomHalf">
+        <form onSubmit={this.handleSubmit}>
+          <label htmlFor="tokenInput">Insert token here:</label>
+          <input
+            id="tokenInput"
+            onChange={this.handleChange}
+            value={tokenInput}
+            type="text"
+          />
+          <button type="submit">Join game</button>
+        </form>
+      </div>
     );
   }
 
