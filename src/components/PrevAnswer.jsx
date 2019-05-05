@@ -1,7 +1,7 @@
 import React from "react";
 
 const PrevAnswer = () => {
-  return <div />;
+  return <p>previous answer here</p>;
 };
 
 export default PrevAnswer;

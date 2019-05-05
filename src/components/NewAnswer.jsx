@@ -3,17 +3,16 @@ import DrawCanvas from "./DrawCanvas";
 
 class NewAnswer extends Component {
   state = {
-    playerToDraw: true,
     textInput: "",
     drawInput: ""
   };
 
   render() {
-    console.log(this.state.drawInput);
+    const { turnNum } = this.props;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          {this.state.playerToDraw ? (
+          {turnNum % 2 !== 0 ? (
             <DrawCanvas updateDrawInput={this.updateDrawInput} />
           ) : (
             <input id="textInput" type="text" onChange={this.handleChange} />
