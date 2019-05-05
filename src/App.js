@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Router, navigate } from "@reach/router";
+import "./css/App.css";
 import StartUpWrapper from "./components/StartUpWrapper";
 import WaitingArea from "./components/WaitingArea";
 import PlayScreen from "./components/PlayScreen";
+import Header from "./components/Header";
 
 class App extends Component {
   state = {
-    gameToken: "iExist",
+    gameToken: null,
     numOfPlayers: null,
-    // numOfPlayers: 3,
     userPosition: null
-    // userPosition: 1
   };
 
   render() {
@@ -23,7 +23,7 @@ class App extends Component {
           addGameConfigs={this.addGameConfigs}
         >
           <div className="App">
-            <h1>Story Consequences</h1>
+            <Header />
             <Router>
               <WaitingArea path="/waiting-area" />
               <PlayScreen

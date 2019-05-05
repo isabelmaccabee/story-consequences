@@ -10,7 +10,7 @@ class NewAnswer extends Component {
   render() {
     const { turnNum } = this.props;
     return (
-      <div>
+      <div className="bottomHalf">
         <form onSubmit={this.handleSubmit}>
           {turnNum % 2 !== 0 ? (
             <DrawCanvas updateDrawInput={this.updateDrawInput} />
@@ -24,6 +24,7 @@ class NewAnswer extends Component {
   }
 
   updateDrawInput = drawInput => {
+    localStorage.setItem("pastDrawing", drawInput);
     this.setState({ drawInput });
   };
 

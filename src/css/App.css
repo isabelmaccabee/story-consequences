@@ -1,0 +1,8 @@
+.App {
+  background-color: rgb(163, 163, 223);
+  display: grid;
+  grid-template: 1fr 8fr/ 1fr;
+  grid-template-areas:
+    "header"
+    "main";
+}
