@@ -1,7 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 
-const PrevAnswer = ({ currentThread }) => {
-  return <p>previous answer from thread {currentThread}</p>;
-};
+class PrevAnswer extends Component {
+  render() {
+    return <p>previous answer from thread {this.props.currentThread}</p>;
+  }
+}
 
 export default PrevAnswer;

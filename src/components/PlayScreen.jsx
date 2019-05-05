@@ -21,11 +21,12 @@ class PlayScreen extends Component {
   }
 
   advanceTurn = () => {
-    const { numOfPlayers } = this.props;
+    const { numOfPlayers, userPosition } = this.props;
     this.setState(prevState => {
       const nextThread = utils.findNextThread(
         prevState.currentThread,
-        numOfPlayers
+        numOfPlayers,
+        userPosition
       );
       return { turnNum: prevState.turnNum + 1, currentThread: nextThread };
     });

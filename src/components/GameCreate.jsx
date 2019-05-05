@@ -37,9 +37,9 @@ class GameCreate extends Component {
     // get token back and set in App
     // sent to waiting area while waiting for other players to arrive
     const tempToken = "123456";
-    const playerCount = 2;
     const position = 1;
-    this.props.addGameConfigs(tempToken, playerCount, position);
+    const { numOfPlayers } = this.state;
+    this.props.addGameConfigs(tempToken, numOfPlayers, position);
   };
 }
 

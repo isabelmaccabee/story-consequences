@@ -7,10 +7,10 @@ import PlayScreen from "./components/PlayScreen";
 class App extends Component {
   state = {
     gameToken: "iExist",
-    // numOfPlayers: null,
-    numOfPlayers: 3,
-    // userPosition: "iExistToo"
-    userPosition: 1
+    numOfPlayers: null,
+    // numOfPlayers: 3,
+    userPosition: null
+    // userPosition: 1
   };
 
   render() {
@@ -28,8 +28,8 @@ class App extends Component {
               <WaitingArea path="/waiting-area" />
               <PlayScreen
                 path="/game-play"
-                userPosition={userPosition}
                 numOfPlayers={numOfPlayers}
+                userPosition={userPosition}
               />
             </Router>
           </div>
