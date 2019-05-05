@@ -9,7 +9,7 @@ class GameJoin extends Component {
     console.log(this.state);
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="tokenInput" />
+        <label htmlFor="tokenInput">Insert token here:</label>
         <input
           id="tokenInput"
           onChange={this.handleChange}

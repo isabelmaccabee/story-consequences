@@ -11,9 +11,9 @@ class GameCreate extends Component {
     // console.log(this.state);
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="nameInput" />
+        <label htmlFor="nameInput">Name:</label>
         <input onChange={this.handleChange} value={nameInput} id="nameInput" />
-        <label htmlFor="numOfPlayers">No. of players</label>
+        <label htmlFor="numOfPlayers">No. of players:</label>
         <input
           type="number"
           min="2"
