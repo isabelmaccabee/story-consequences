@@ -7,13 +7,12 @@ import PlayScreen from "./components/PlayScreen";
 class App extends Component {
   state = {
     gameToken: "iExist",
-    numOfPlayers: null
-    // userPosition: "iExistToo"
+    numOfPlayers: null,
+    userPosition: "iExistToo"
   };
 
   render() {
     const { gameToken, userPosition } = this.state;
-    console.log(this.state);
     return (
       <div>
         <StartUpWrapper
