@@ -29,6 +29,14 @@ class GameJoin extends Component {
     e.preventDefault();
     // makes request to check there is a game, and be assigned (or choose) 'position' number
     // update app state with token and position
+    if (this.state.tokenInput === "123456") {
+      const tempToken = this.state.tokenInput;
+      const playerCount = 2;
+      const position = 2;
+      this.props.addGameConfigs(tempToken, playerCount, position);
+    } else {
+      console.log("wrong token");
+    }
   };
 }
 

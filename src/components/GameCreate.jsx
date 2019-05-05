@@ -8,7 +8,7 @@ class GameCreate extends Component {
 
   render() {
     const { nameInput } = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="nameInput" />
@@ -36,6 +36,10 @@ class GameCreate extends Component {
     // send request to db
     // get token back and set in App
     // sent to waiting area while waiting for other players to arrive
+    const tempToken = "123456";
+    const playerCount = 2;
+    const position = 1;
+    this.props.addGameConfigs(tempToken, playerCount, position);
   };
 }
 
