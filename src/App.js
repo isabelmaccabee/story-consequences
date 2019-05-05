@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Router } from "@reach/router";
+import { Router, navigate } from "@reach/router";
 import StartUpWrapper from "./components/StartUpWrapper";
 import WaitingArea from "./components/WaitingArea";
+import PlayScreen from "./components/PlayScreen";
 
 class App extends Component {
   state = {
@@ -24,6 +25,7 @@ class App extends Component {
             <h1>Story Consequences</h1>
             <Router>
               <WaitingArea path="/waiting-area" />
+              <PlayScreen path="/game-play" />
             </Router>
           </div>
         </StartUpWrapper>
@@ -32,7 +34,9 @@ class App extends Component {
   }
 
   addGameConfigs = (gameToken, numOfPlayers, userPosition) => {
-    this.setState({ gameToken, numOfPlayers, userPosition });
+    this.setState({ gameToken, numOfPlayers, userPosition }, () => {
+      navigate("/game-play");
+    });
   };
 }
 
