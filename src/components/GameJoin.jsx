@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import * as api from "../api";
 
 class GameJoin extends Component {
   state = {
-    tokenInput: ""
+    tokenInput: "",
+    nameInput: "userHere"
   };
   render() {
     const { tokenInput } = this.state;
@@ -31,14 +33,22 @@ class GameJoin extends Component {
     e.preventDefault();
     // makes request to check there is a game, and be assigned (or choose) 'position' number
     // update app state with token and position
-    if (this.state.tokenInput === "123456") {
-      const tempToken = this.state.tokenInput;
-      const playerCount = 4;
-      const position = 3;
-      this.props.addGameConfigs(tempToken, playerCount, position);
-    } else {
-      console.log("wrong token");
-    }
+    const { tokenInput, nameInput } = this.state;
+    api
+      .checkGameExists(tokenInput)
+      .then(response => {
+        if (!response.empty) {
+          return api.joinGame(tokenInput, nameInput);
+        } else {
+          return Promise.reject({ msg: "game didn't exist" });
+        }
+      })
+      .then(addedUser => {
+        this.props.addGameConfigs(tokenInput, 4, addedUser.id);
+      })
+      .catch(err => {
+        console.log("err", err.msg);
+      });
   };
 }
 
