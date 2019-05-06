@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import * as api from "../api.js";
 
 // to go in api.js
 import firebase from "../firebase";
@@ -17,20 +16,32 @@ class WaitingArea extends Component {
         <p>
           number of people in the room :{this.state.numOfPlayers}/{numOfPlayers}
         </p>
+
+        <button>leave game</button>
       </div>
     );
   }
 
   componentDidMount() {
-    checkNumOfPlayers(this.props.gameToken).then(({ docs }) => {
+    const db = firebase.firestore();
+    db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
       this.setState({ numOfPlayers: docs.length });
     });
   }
 }
 
-export default WaitingArea;
-const db = firebase.firestore();
+// componentDidMount() {
+//   const db = firebase.firestore();
+//   db.collection("test")
+//     .doc("x0NWpoBh0lt71ZgqqdZF")
+//     .onSnapshot((doc) => {
+//       const canvas = doc.data().drawing;
+//       const text = doc.data().text;
+//       console.log(doc.data());
+//       this.setState((prevState) => {
+//         return { ...prevState, canvas, write: !prevState.write, text };
+//       });
+//     });
+// }
 
-const checkNumOfPlayers = async (token) => {
-  return await db.collection(token).get();
-};
+export default WaitingArea;
