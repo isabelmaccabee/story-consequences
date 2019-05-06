@@ -10,7 +10,8 @@ class App extends Component {
   state = {
     gameToken: null,
     numOfPlayers: null,
-    userPosition: null
+    userPosition: 1,
+    userId: null
   };
 
   render() {
@@ -38,8 +39,8 @@ class App extends Component {
     );
   }
 
-  addGameConfigs = (gameToken, numOfPlayers, userPosition) => {
-    this.setState({ gameToken, numOfPlayers, userPosition }, () => {
+  addGameConfigs = (gameToken, numOfPlayers, userId) => {
+    this.setState({ gameToken, numOfPlayers, userId }, () => {
       navigate("/game-play");
     });
   };

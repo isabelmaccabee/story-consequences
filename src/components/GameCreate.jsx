@@ -40,23 +40,22 @@ class GameCreate extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // send request to db:
-    // - make collection with timestamp + name 'id'
-    // - make new document representing this user (and auto-generate doc id)
-    // get token back and set in App
-    // sent to waiting area while waiting for other players to arrive
-
-    const tempToken = "123456";
+    // sends request to db:
+    // - makes collection with timestamp + name 'id'
+    // - makes new document representing this user (and auto-generate doc id)
+    // get doc id (representing this user) back and set in App
+    // sent to waiting area while waiting for other players to arrive - TO DO
     const { nameInput, numOfPlayers } = this.state;
     api
       .createGame(nameInput)
-      .then(ref => {
-        console.log(ref.id);
+      .then(({ addedUser, token }) => {
+        console.log(addedUser.id);
+        console.log(token);
+        this.props.addGameConfigs(token, numOfPlayers, addedUser.id);
       })
       .catch(err => {
         console.log("something went wrong 2", err);
       });
-    this.props.addGameConfigs(tempToken, numOfPlayers, 1);
   };
 }
 

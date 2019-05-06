@@ -6,7 +6,8 @@ export const createGame = async nameInput => {
     .toUpperCase()
     .slice(0, 2)}`;
   const db = firebase.firestore();
-  return await db.collection(token).add({
+  const addedUser = await db.collection(token).add({
     name: nameInput
   });
+  return { addedUser, token };
 };
