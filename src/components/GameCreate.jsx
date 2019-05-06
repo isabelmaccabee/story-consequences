@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as api from "../api";
 
 class GameCreate extends Component {
   state = {
@@ -39,13 +40,22 @@ class GameCreate extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // send request to db
-    // get token back and set in App
-    // sent to waiting area while waiting for other players to arrive
-    const tempToken = "123456";
-    const position = 1;
-    const { numOfPlayers } = this.state;
-    this.props.addGameConfigs(tempToken, numOfPlayers, position);
+    // sends request to db:
+    // - makes collection with timestamp + name 'id'
+    // - makes new document representing this user (and auto-generate doc id)
+    // get doc id (representing this user) back and set in App
+    // sent to waiting area while waiting for other players to arrive - TO DO
+    const { nameInput, numOfPlayers } = this.state;
+    api
+      .createGame(nameInput)
+      .then(({ addedUser, token }) => {
+        console.log(addedUser.id);
+        console.log(token);
+        this.props.addGameConfigs(token, numOfPlayers, addedUser.id);
+      })
+      .catch(err => {
+        console.log("something went wrong 2", err);
+      });
   };
 }
 
