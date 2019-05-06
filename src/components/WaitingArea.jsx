@@ -4,7 +4,8 @@ import { navigate } from "@reach/router";
 
 class WaitingArea extends Component {
   state = {
-    currentNumOfPlayers: 1
+    currentNumOfPlayers: 1,
+    isReady: false
   };
   render() {
     const { numOfPlayers, leaveGame, gameToken, userId } = this.props;
@@ -16,7 +17,7 @@ class WaitingArea extends Component {
           {numOfPlayers}
         </p>
         <button onClick={() => leaveGame(gameToken, userId)}>leave game</button>
-        <button>ready</button>
+        <button onClick={this.setReadiness}>ready</button>
       </div>
     );
   }
@@ -24,17 +25,47 @@ class WaitingArea extends Component {
   componentDidMount() {
     const db = firebase.firestore();
     db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
-      console.log(docs);
       this.setState({ currentNumOfPlayers: docs.length });
     });
   }
   componentDidUpdate() {
-    const { currentNumOfPlayers } = this.state;
-    const { numOfPlayers } = this.props;
-    if (currentNumOfPlayers === numOfPlayers) {
-      navigate("./game-play");
+    const { currentNumOfPlayers, isReady } = this.state;
+    const { numOfPlayers, gameToken } = this.props;
+    if (isReady && currentNumOfPlayers === numOfPlayers) {
+      const db = firebase.firestore();
+      const players = db.collection(gameToken);
+      players
+        .where("isReady", "==", true)
+        .get()
+        .then((res) => {
+          if (res.docs.length === numOfPlayers) {
+            navigate("./game-play");
+          }
+        });
     }
   }
+
+  setReadiness = () => {
+    const { gameToken, userId } = this.props;
+    const { isReady } = this.state;
+    this.setState(
+      (prevState) => {
+        return { ...prevState, isReady: !prevState.isReady };
+      },
+      () => {
+        updateReadiness(gameToken, userId, isReady);
+      }
+    );
+  };
 }
+
+// to go into ../api.js
+const updateReadiness = async (token, userId, isReady) => {
+  const db = firebase.firestore();
+  return await db
+    .collection(token)
+    .doc(userId)
+    .set({ isReady });
+};
 
 export default WaitingArea;
