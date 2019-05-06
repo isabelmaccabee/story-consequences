@@ -9,7 +9,6 @@ class GameCreate extends Component {
 
   render() {
     const { nameInput } = this.state;
-    // console.log(this.state);
     return (
       <div className="topHalf">
         <form onSubmit={this.handleSubmit}>
