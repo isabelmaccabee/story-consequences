@@ -32,30 +32,22 @@ class WaitingArea extends Component {
     const { currentNumOfPlayers, isReady } = this.state;
     const { numOfPlayers, gameToken } = this.props;
     if (isReady && currentNumOfPlayers === numOfPlayers) {
-      const db = firebase.firestore();
-      const players = db.collection(gameToken);
-      players
-        .where("isReady", "==", true)
-        .get()
-        .then((res) => {
-          if (res.docs.length === numOfPlayers) {
-            navigate("./game-play");
-          }
-        });
+      getReadyPlayers(gameToken).then((res) => {
+        if (res.docs.length === numOfPlayers) {
+          navigate("./game-play");
+        }
+      });
     }
   }
+  //probs need a componentDidUnmount
 
   setReadiness = () => {
     const { gameToken, userId } = this.props;
     const { isReady } = this.state;
-    this.setState(
-      (prevState) => {
-        return { ...prevState, isReady: !prevState.isReady };
-      },
-      () => {
-        updateReadiness(gameToken, userId, isReady);
-      }
-    );
+    updateReadiness(gameToken, userId, !isReady);
+    this.setState((prevState) => {
+      return { ...prevState, isReady: !prevState.isReady };
+    });
   };
 }
 
@@ -65,7 +57,13 @@ const updateReadiness = async (token, userId, isReady) => {
   return await db
     .collection(token)
     .doc(userId)
-    .set({ isReady });
+    .set({ isReady: isReady });
+};
+
+const getReadyPlayers = async (token) => {
+  const db = firebase.firestore();
+  const players = db.collection(token);
+  return await players.where("isReady", "==", true).get();
 };
 
 export default WaitingArea;
