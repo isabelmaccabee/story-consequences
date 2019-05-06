@@ -9,6 +9,10 @@ class PlayScreen extends Component {
     currentThread: null
   };
 
+  // on mount (or ideally in waiting-area when all users have joined)
+  // invoke utils.orderUserIds
+  // to get alphabetically ordered users and currentUser's position in game
+
   render() {
     const { turnNum, currentThread } = this.state;
     console.log(this.state);

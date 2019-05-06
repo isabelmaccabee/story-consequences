@@ -11,8 +11,10 @@ utils.findNextThread = (prevThread, numOfPlayers, userPosition) => {
 
 utils.orderUserIds = (usersArr, currentUserId) => {
   const baseObj = { orderedUsers: [], currentUserPosition: null };
+
   const sortedUsers = usersArr.sort();
   baseObj.orderedUsers.push(...sortedUsers);
+
   const index = usersArr.findIndex(id => id === currentUserId);
   baseObj.currentUserPosition = index === -1 ? null : index + 1;
   return baseObj;
