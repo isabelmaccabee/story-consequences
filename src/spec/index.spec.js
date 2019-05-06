@@ -59,3 +59,37 @@ describe("findNewAnswerFrom", () => {
     ).to.equal(5);
   });
 });
+
+describe.only("orderUserIds", () => {
+  it("returns correct object when passed single itemed array with own id", () => {
+    expect(utils.orderUserIds(["testId"], "testId")).to.eql({
+      orderedUsers: ["testId"],
+      currentUserPosition: 1
+    });
+  });
+  it("returns correct object when passed single itemed array without own id", () => {
+    expect(utils.orderUserIds(["no"], "amIinTheArray")).to.eql({
+      orderedUsers: ["no"],
+      currentUserPosition: null
+    });
+  });
+  it("returns object with orderedUsers alphabetically when passed multiple itemed array (case)", () => {
+    expect(
+      utils.orderUserIds(["bbb", "aaa", "ccc"], "ccc").orderedUsers
+    ).to.eql(["aaa", "bbb", "ccc"]);
+    expect(
+      utils.orderUserIds(["BBB", "AAA", "CCC"], "ccc").orderedUsers
+    ).to.eql(["AAA", "BBB", "CCC"]);
+    expect(
+      utils.orderUserIds(
+        ["s5wACk42W2NJBT9BQ5u3", "g1YZWc7mlhIJDnW4nfki"],
+        "g1YZWc7mlhIJDnW4nfki"
+      ).orderedUsers
+    ).to.eql(["g1YZWc7mlhIJDnW4nfki", "s5wACk42W2NJBT9BQ5u3"]);
+  });
+  it("returns correct object when passed single itemed array without own id", () => {
+    expect(
+      utils.orderUserIds(["aaa", "bbb"], "bbb").currentUserPosition
+    ).to.equal(2);
+  });
+});
