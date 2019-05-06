@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import firebase from "../firebase";
+import * as api from "../api";
 
 class GameCreate extends Component {
   state = {
@@ -45,27 +45,18 @@ class GameCreate extends Component {
     // - make new document representing this user (and auto-generate doc id)
     // get token back and set in App
     // sent to waiting area while waiting for other players to arrive
+
     const tempToken = "123456";
     const { nameInput, numOfPlayers } = this.state;
-    const timeStamp = Date.now();
-    const token = `${Math.floor(
-      timeStamp / 1000
-    )}${nameInput.toUpperCase().slice(0, 2)}`;
-    const position = 1;
-
-    const db = firebase.firestore();
-    const userRef = db
-      .collection(token)
-      .add({
-        name: nameInput
-      })
+    api
+      .createGame(nameInput)
       .then(ref => {
-        console.log("added", ref.id);
+        console.log(ref.id);
       })
       .catch(err => {
-        console.log("something went wrong", err);
+        console.log("something went wrong 2", err);
       });
-    this.props.addGameConfigs(tempToken, numOfPlayers, position);
+    this.props.addGameConfigs(tempToken, numOfPlayers, 1);
   };
 }
 
