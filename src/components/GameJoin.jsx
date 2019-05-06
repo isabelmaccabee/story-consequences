@@ -4,10 +4,10 @@ import * as api from "../api";
 class GameJoin extends Component {
   state = {
     tokenInput: "",
-    nameInput: "userHere"
+    nameInput: ""
   };
   render() {
-    const { tokenInput } = this.state;
+    const { tokenInput, nameInput } = this.state;
     console.log(this.state);
     return (
       <div className="bottomHalf">
@@ -19,6 +19,13 @@ class GameJoin extends Component {
             value={tokenInput}
             type="text"
           />
+          <label htmlFor="nameInput">Name:</label>
+          <input
+            id="nameInput"
+            onChange={this.handleChange}
+            value={nameInput}
+            type="text"
+          />
           <button type="submit">Join game</button>
         </form>
       </div>
@@ -26,7 +33,8 @@ class GameJoin extends Component {
   }
 
   handleChange = e => {
-    this.setState({ tokenInput: e.target.value });
+    const { value, id } = e.target;
+    this.setState({ [id]: value });
   };
 
   handleSubmit = e => {
