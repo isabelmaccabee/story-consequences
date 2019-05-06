@@ -5,6 +5,7 @@ import StartUpWrapper from "./components/StartUpWrapper";
 import WaitingArea from "./components/WaitingArea";
 import PlayScreen from "./components/PlayScreen";
 import Header from "./components/Header";
+import firebase from "./firebase";
 
 class App extends Component {
   state = {
@@ -15,7 +16,7 @@ class App extends Component {
   };
 
   render() {
-    const { gameToken, userPosition, numOfPlayers } = this.state;
+    const { gameToken, userPosition, numOfPlayers, userId } = this.state;
     return (
       <div>
         <StartUpWrapper
@@ -26,7 +27,13 @@ class App extends Component {
           <div className="App">
             <Header />
             <Router>
-              <WaitingArea path="/waiting-area" />
+              <WaitingArea
+                path="/waiting-area"
+                numOfPlayers={numOfPlayers}
+                gameToken={gameToken}
+                leaveGame={this.leaveGame}
+                userId={userId}
+              />
               <PlayScreen
                 path="/game-play"
                 numOfPlayers={numOfPlayers}
@@ -41,9 +48,36 @@ class App extends Component {
 
   addGameConfigs = (gameToken, numOfPlayers, userId) => {
     this.setState({ gameToken, numOfPlayers, userId }, () => {
-      navigate("/game-play");
+      navigate("/waiting-area");
     });
   };
+
+  // NEW STUFF
+
+  leaveGame = (gameToken, userId) => {
+    removePlayer(gameToken, userId)
+      .then(() => {
+        this.setState({
+          gameToken: null,
+          numOfPlayers: null,
+          userPosition: 1,
+          userId: null
+        });
+      })
+      .then(() => {
+        navigate("./");
+      });
+  };
 }
+
+//********   ./api.js   ********
+const removePlayer = async (token, userId) => {
+  const db = firebase.firestore();
+
+  return await db
+    .collection(token)
+    .doc(userId)
+    .delete();
+};
 
 export default App;
