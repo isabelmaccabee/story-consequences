@@ -22,17 +22,18 @@ export const makeGameInfoDoc = async (tokenInput, numOfPlayers) => {
     });
 };
 
-export const checkGameExists = async tokenInput => {
+export const checkGameExists = async (tokenInput) => {
   return await db.collection(tokenInput).get();
 };
 
 export const joinGame = async (tokenInput, nameInput) => {
   return await db.collection(tokenInput).add({
-    name: nameInput
+    name: nameInput,
+    isReady: false
   });
 };
 
-export const getGameInfo = async tokenInput => {
+export const getGameInfo = async (tokenInput) => {
   const info = await db
     .collection(tokenInput)
     .doc("gameInfo")
@@ -57,7 +58,7 @@ export const updateReadiness = async (token, userId, isReady) => {
     .update({ isReady: isReady });
 };
 
-export const getReadyPlayers = async token => {
+export const getReadyPlayers = async (token) => {
   const db = firebase.firestore();
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
