@@ -39,3 +39,12 @@ export const getGameInfo = async tokenInput => {
     .get();
   return info.data();
 };
+
+export const removePlayer = async (token, userId) => {
+  const db = firebase.firestore();
+
+  return await db
+    .collection(token)
+    .doc(userId)
+    .delete();
+};

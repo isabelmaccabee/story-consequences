@@ -6,6 +6,7 @@ import WaitingArea from "./components/WaitingArea";
 import PlayScreen from "./components/PlayScreen";
 import Header from "./components/Header";
 import firebase from "./firebase";
+import * as api from "./api";
 
 class App extends Component {
   state = {
@@ -55,7 +56,8 @@ class App extends Component {
   // NEW STUFF
 
   leaveGame = (gameToken, userId) => {
-    removePlayer(gameToken, userId)
+    api
+      .removePlayer(gameToken, userId)
       .then(() => {
         this.setState({
           gameToken: null,
@@ -69,15 +71,5 @@ class App extends Component {
       });
   };
 }
-
-//********   ./api.js   ********
-const removePlayer = async (token, userId) => {
-  const db = firebase.firestore();
-
-  return await db
-    .collection(token)
-    .doc(userId)
-    .delete();
-};
 
 export default App;
