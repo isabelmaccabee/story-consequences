@@ -48,3 +48,17 @@ export const removePlayer = async (token, userId) => {
     .doc(userId)
     .delete();
 };
+
+export const updateReadiness = async (token, userId, isReady) => {
+  const db = firebase.firestore();
+  return await db
+    .collection(token)
+    .doc(userId)
+    .update({ isReady: isReady });
+};
+
+export const getReadyPlayers = async token => {
+  const db = firebase.firestore();
+  const players = db.collection(token);
+  return await players.where("isReady", "==", true).get();
+};

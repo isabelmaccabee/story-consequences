@@ -79,10 +79,3 @@ describe("orderUserIds", () => {
     expect(orderUserIds(["aaa", "bbb"], "bbb").currentUserPosition).to.equal(2);
   });
 });
-
-console.log(
-  orderUserIds(
-    ["SWoWVn1EnAoisqQeoYTm", "bKNXQfkCmv35NfAVMpE1"],
-    "bKNXQfkCmv35NfAVMpE1"
-  )
-);

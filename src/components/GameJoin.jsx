@@ -38,8 +38,6 @@ class GameJoin extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // makes request to check there is a game, and be assigned (or choose) 'position' number
-    // update app state with token and position
     const { tokenInput, nameInput } = this.state;
     api
       .checkGameExists(tokenInput)
@@ -54,7 +52,6 @@ class GameJoin extends Component {
         }
       })
       .then(([addedUser, gameInfo]) => {
-        console.log(gameInfo.numOfPlayers);
         this.props.addGameConfigs(
           tokenInput,
           +gameInfo.numOfPlayers,
