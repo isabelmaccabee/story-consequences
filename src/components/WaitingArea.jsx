@@ -32,7 +32,7 @@ class WaitingArea extends Component {
     const { currentNumOfPlayers, isReady } = this.state;
     const { numOfPlayers, gameToken } = this.props;
     if (isReady && currentNumOfPlayers === numOfPlayers) {
-      getReadyPlayers(gameToken).then((res) => {
+      getReadyPlayers(gameToken).then(res => {
         if (res.docs.length === numOfPlayers) {
           navigate("./game-play");
         }
@@ -45,7 +45,7 @@ class WaitingArea extends Component {
     const { gameToken, userId } = this.props;
     const { isReady } = this.state;
     updateReadiness(gameToken, userId, !isReady);
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return { ...prevState, isReady: !prevState.isReady };
     });
   };
@@ -57,10 +57,10 @@ const updateReadiness = async (token, userId, isReady) => {
   return await db
     .collection(token)
     .doc(userId)
-    .set({ isReady: isReady });
+    .update({ isReady: isReady });
 };
 
-const getReadyPlayers = async (token) => {
+const getReadyPlayers = async token => {
   const db = firebase.firestore();
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
