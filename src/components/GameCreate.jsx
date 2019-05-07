@@ -21,7 +21,7 @@ class GameCreate extends Component {
           <label htmlFor="numOfPlayers">No. of players:</label>
           <input
             type="number"
-            min="2"
+            min="1"
             max="4"
             onChange={this.handleChange}
             id="numOfPlayers"

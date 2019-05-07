@@ -41,8 +41,6 @@ export const getGameInfo = async tokenInput => {
 };
 
 export const removePlayer = async (token, userId) => {
-  const db = firebase.firestore();
-
   return await db
     .collection(token)
     .doc(userId)
@@ -50,7 +48,6 @@ export const removePlayer = async (token, userId) => {
 };
 
 export const updateReadiness = async (token, userId, isReady) => {
-  const db = firebase.firestore();
   return await db
     .collection(token)
     .doc(userId)
@@ -58,7 +55,30 @@ export const updateReadiness = async (token, userId, isReady) => {
 };
 
 export const getReadyPlayers = async token => {
-  const db = firebase.firestore();
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
+};
+
+export const sendThreadInput = async (
+  input,
+  turnNum,
+  currentThread,
+  gameToken,
+  authorId
+) => {
+  return await db
+    .collection(gameToken)
+    .doc(currentThread)
+    .collection("thread")
+    .doc(`${turnNum}`)
+    .set({ author: authorId, input: input });
+};
+
+export const getPrevAnswer = async (turnNum, currentThread, gameToken) => {
+  return await db
+    .collection(gameToken)
+    .doc(currentThread)
+    .collection("thread")
+    .doc(`${turnNum - 1}`)
+    .get();
 };
