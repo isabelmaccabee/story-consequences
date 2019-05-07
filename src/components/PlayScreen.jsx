@@ -18,7 +18,11 @@ class PlayScreen extends Component {
     return (
       <div className="main">
         {currentThreadIndex && (
-          <PrevAnswer currentThread={currentThread} turnNum={turnNum} />
+          <PrevAnswer
+            currentThread={currentThread}
+            turnNum={turnNum}
+            gameToken={gameToken}
+          />
         )}
         <NewAnswer
           turnNum={turnNum}

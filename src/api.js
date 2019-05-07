@@ -73,3 +73,12 @@ export const sendThreadInput = async (
     .doc(`${turnNum}`)
     .set({ author: authorId, input: input });
 };
+
+export const getPrevAnswer = async (turnNum, currentThread, gameToken) => {
+  return await db
+    .collection(gameToken)
+    .doc(currentThread)
+    .collection("thread")
+    .doc(`${turnNum - 1}`)
+    .get();
+};
