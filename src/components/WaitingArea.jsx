@@ -11,6 +11,7 @@ class WaitingArea extends Component {
     const { numOfPlayers, leaveGame, gameToken, userId } = this.props;
     return (
       <div className="main">
+        {gameToken && <h2>{gameToken}</h2>}
         <p>hello welcome to the waiting area</p>
         <p>
           number of people in the room :{this.state.currentNumOfPlayers}/
@@ -31,12 +32,17 @@ class WaitingArea extends Component {
   componentDidUpdate() {
     const { currentNumOfPlayers, isReady } = this.state;
     const { numOfPlayers, gameToken } = this.props;
-    if (isReady && currentNumOfPlayers === numOfPlayers) {
-      getReadyPlayers(gameToken).then(res => {
-        if (res.docs.length === numOfPlayers) {
-          navigate("./game-play");
-        }
-      });
+    if (isReady && currentNumOfPlayers === +numOfPlayers) {
+      getReadyPlayers(gameToken)
+        .then(res => {
+          console.log(res.doc);
+          if (res.docs.length === +numOfPlayers) {
+            navigate("./game-play");
+          }
+        })
+        .catch(err => {
+          console.log("somehting went wrong", err);
+        });
     }
   }
   //probs need a componentDidUnmount

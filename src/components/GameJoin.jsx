@@ -52,7 +52,7 @@ class GameJoin extends Component {
         }
       })
       .then(addedUser => {
-        this.props.addGameConfigs(tokenInput, 4, addedUser.id);
+        this.props.addGameConfigs(tokenInput, 3, addedUser.id);
       })
       .catch(err => {
         console.log("err", err.msg);
