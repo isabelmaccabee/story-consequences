@@ -11,6 +11,7 @@ class WaitingArea extends Component {
     const { numOfPlayers, leaveGame, gameToken, userId } = this.props;
     return (
       <div className="main">
+        {gameToken && <h2>{gameToken}</h2>}
         <p>hello welcome to the waiting area</p>
         <p>
           number of people in the room :{this.state.currentNumOfPlayers}/
@@ -25,18 +26,24 @@ class WaitingArea extends Component {
   componentDidMount() {
     const db = firebase.firestore();
     db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
-      this.setState({ currentNumOfPlayers: docs.length });
+      this.setState({ currentNumOfPlayers: docs.length - 1 });
     });
   }
   componentDidUpdate() {
     const { currentNumOfPlayers, isReady } = this.state;
     const { numOfPlayers, gameToken } = this.props;
-    if (isReady && currentNumOfPlayers === numOfPlayers) {
-      getReadyPlayers(gameToken).then((res) => {
-        if (res.docs.length === numOfPlayers) {
-          navigate("./game-play");
-        }
-      });
+    console.log("numOfPlayersL", numOfPlayers, currentNumOfPlayers, "<< curr");
+    if (isReady && currentNumOfPlayers === +numOfPlayers) {
+      getReadyPlayers(gameToken)
+        .then(res => {
+          console.log(res);
+          if (res.docs.length === +numOfPlayers) {
+            navigate("./game-play");
+          }
+        })
+        .catch(err => {
+          console.log("somehting went wrong", err);
+        });
     }
   }
   //probs need a componentDidUnmount
@@ -45,7 +52,7 @@ class WaitingArea extends Component {
     const { gameToken, userId } = this.props;
     const { isReady } = this.state;
     updateReadiness(gameToken, userId, !isReady);
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return { ...prevState, isReady: !prevState.isReady };
     });
   };
@@ -57,10 +64,10 @@ const updateReadiness = async (token, userId, isReady) => {
   return await db
     .collection(token)
     .doc(userId)
-    .set({ isReady: isReady });
+    .update({ isReady: isReady });
 };
 
-const getReadyPlayers = async (token) => {
+const getReadyPlayers = async token => {
   const db = firebase.firestore();
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
