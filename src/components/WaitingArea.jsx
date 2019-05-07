@@ -26,16 +26,17 @@ class WaitingArea extends Component {
   componentDidMount() {
     const db = firebase.firestore();
     db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
-      this.setState({ currentNumOfPlayers: docs.length });
+      this.setState({ currentNumOfPlayers: docs.length - 1 });
     });
   }
   componentDidUpdate() {
     const { currentNumOfPlayers, isReady } = this.state;
     const { numOfPlayers, gameToken } = this.props;
+    console.log("numOfPlayersL", numOfPlayers, currentNumOfPlayers, "<< curr");
     if (isReady && currentNumOfPlayers === +numOfPlayers) {
       getReadyPlayers(gameToken)
         .then(res => {
-          console.log(res.doc);
+          console.log(res);
           if (res.docs.length === +numOfPlayers) {
             navigate("./game-play");
           }

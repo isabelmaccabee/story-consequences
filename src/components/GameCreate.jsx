@@ -46,8 +46,8 @@ class GameCreate extends Component {
     // sent to waiting area while waiting for other players to arrive - TO DO
     const { nameInput, numOfPlayers } = this.state;
     api
-      .createGame(nameInput)
-      .then(({ addedUser, token }) => {
+      .createGame(nameInput, numOfPlayers)
+      .then(([addedUser, token, gameInfoDoc]) => {
         console.log(addedUser.id);
         console.log(token);
         this.props.addGameConfigs(token, numOfPlayers, addedUser.id);
