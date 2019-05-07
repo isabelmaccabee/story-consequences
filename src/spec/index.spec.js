@@ -75,7 +75,14 @@ describe("orderUserIds", () => {
       ).orderedUsers
     ).to.eql(["g1YZWc7mlhIJDnW4nfki", "s5wACk42W2NJBT9BQ5u3"]);
   });
-  it("returns correct object when passed single itemed array without own id", () => {
+  it("returns correct object when passed single itemed array with own id", () => {
     expect(orderUserIds(["aaa", "bbb"], "bbb").currentUserPosition).to.equal(2);
   });
 });
+
+console.log(
+  orderUserIds(
+    ["SWoWVn1EnAoisqQeoYTm", "bKNXQfkCmv35NfAVMpE1"],
+    "bKNXQfkCmv35NfAVMpE1"
+  )
+);

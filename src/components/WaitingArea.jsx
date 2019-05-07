@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import firebase from "../firebase";
-import { navigate } from "@reach/router";
 
 class WaitingArea extends Component {
   state = {
@@ -31,14 +30,13 @@ class WaitingArea extends Component {
   }
   componentDidUpdate() {
     const { currentNumOfPlayers, isReady } = this.state;
-    const { numOfPlayers, gameToken } = this.props;
-    console.log("numOfPlayersL", numOfPlayers, currentNumOfPlayers, "<< curr");
+    const { numOfPlayers, gameToken, addUsersList } = this.props;
     if (isReady && currentNumOfPlayers === +numOfPlayers) {
       getReadyPlayers(gameToken)
         .then(res => {
-          console.log(res);
           if (res.docs.length === +numOfPlayers) {
-            navigate("./game-play");
+            const idsOnly = res.docs.map(doc => doc.id);
+            addUsersList(idsOnly);
           }
         })
         .catch(err => {
