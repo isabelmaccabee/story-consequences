@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DrawCanvas from "./DrawCanvas";
+import * as api from "../api";
 
 class NewAnswer extends Component {
   state = {
@@ -12,7 +13,7 @@ class NewAnswer extends Component {
     return (
       <div className="bottomHalf">
         <form onSubmit={this.handleSubmit}>
-          {turnNum % 2 !== 0 ? (
+          {turnNum % 2 === 0 ? (
             <DrawCanvas updateDrawInput={this.updateDrawInput} />
           ) : (
             <input id="textInput" type="text" onChange={this.handleChange} />
@@ -35,7 +36,18 @@ class NewAnswer extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.advanceTurn();
+    const { gameToken, userId, turnNum, currentThreadIndex } = this.props;
+    api
+      .sendThreadInput(
+        this.state.textInput,
+        turnNum,
+        currentThreadIndex || userId,
+        gameToken,
+        userId
+      )
+      .then(() => {
+        this.props.advanceTurn();
+      });
   };
 }
 

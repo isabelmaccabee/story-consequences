@@ -5,23 +5,28 @@ import utils from "../utils";
 
 class PlayScreen extends Component {
   state = {
-    turnNum: 0,
-    currentThread: null
+    turnNum: 1,
+    currentThreadIndex: null
   };
 
-  // on mount (or ideally in waiting-area when all users have joined)
-  // invoke utils.orderUserIds
-  // to get alphabetically ordered users and currentUser's position in game
-
   render() {
-    const { turnNum, currentThread } = this.state;
-    console.log(this.state);
+    const { turnNum, currentThreadIndex } = this.state;
+    const { gameToken, allUsers, userId } = this.props;
+    const currentThread = currentThreadIndex
+      ? allUsers[currentThreadIndex - 1]
+      : null;
     return (
       <div className="main">
-        {currentThread && (
+        {currentThreadIndex && (
           <PrevAnswer currentThread={currentThread} turnNum={turnNum} />
         )}
-        <NewAnswer turnNum={turnNum} advanceTurn={this.advanceTurn} />
+        <NewAnswer
+          turnNum={turnNum}
+          advanceTurn={this.advanceTurn}
+          userId={userId}
+          gameToken={gameToken}
+          currentThread={currentThread}
+        />
       </div>
     );
   }
@@ -30,11 +35,11 @@ class PlayScreen extends Component {
     const { numOfPlayers, userPosition } = this.props;
     this.setState(prevState => {
       const nextThread = utils.findNextThread(
-        prevState.currentThread,
+        prevState.currentThreadIndex,
         numOfPlayers,
         userPosition
       );
-      return { turnNum: prevState.turnNum + 1, currentThread: nextThread };
+      return { turnNum: prevState.turnNum + 1, currentThreadIndex: nextThread };
     });
   };
 }

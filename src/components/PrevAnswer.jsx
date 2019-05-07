@@ -9,7 +9,7 @@ class PrevAnswer extends Component {
     return (
       <div className="topHalf">
         <p>previous answer from thread {this.props.currentThread}</p>
-        {this.props.turnNum % 2 === 0 ? (
+        {this.props.turnNum % 2 !== 0 ? (
           <Canvas disabled saveData={localStorage.getItem("pastDrawing")} />
         ) : (
           <p>Text here text here</p>
