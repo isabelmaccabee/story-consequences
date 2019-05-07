@@ -39,12 +39,6 @@ class GameCreate extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // sends request to db:
-    // - makes collection with timestamp + name 'id'
-    // - makes new document representing this user (and auto-generate doc id)
-    // get doc id (representing this user) back and set in App
-    // sent to waiting area while waiting for other players to arrive - TO DO
-
     const { nameInput, numOfPlayers } = this.state;
     api
       .createGame(nameInput, numOfPlayers)

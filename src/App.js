@@ -5,18 +5,21 @@ import StartUpWrapper from "./components/StartUpWrapper";
 import WaitingArea from "./components/WaitingArea";
 import PlayScreen from "./components/PlayScreen";
 import Header from "./components/Header";
-import firebase from "./firebase";
+import * as api from "./api";
+import * as utils from "./utils/index";
 
 class App extends Component {
   state = {
     gameToken: null,
     numOfPlayers: null,
-    userPosition: 1,
-    userId: null
+    userPosition: null,
+    userId: null,
+    allUsers: []
   };
 
   render() {
     const { gameToken, userPosition, numOfPlayers, userId } = this.state;
+    console.log(this.state);
     return (
       <div>
         <StartUpWrapper
@@ -33,6 +36,7 @@ class App extends Component {
                 gameToken={gameToken}
                 leaveGame={this.leaveGame}
                 userId={userId}
+                addUsersList={this.addUsersList}
               />
               <PlayScreen
                 path="/game-play"
@@ -46,6 +50,22 @@ class App extends Component {
     );
   }
 
+  addUsersList = idArray => {
+    const { orderedUsers, currentUserPosition } = utils.orderUserIds(
+      idArray,
+      this.state.userId
+    );
+    this.setState(
+      {
+        allUsers: orderedUsers,
+        userPosition: currentUserPosition
+      },
+      () => {
+        navigate("./game-play");
+      }
+    );
+  };
+
   addGameConfigs = (gameToken, numOfPlayers, userId) => {
     this.setState({ gameToken, numOfPlayers, userId }, () => {
       navigate("/waiting-area");
@@ -55,7 +75,8 @@ class App extends Component {
   // NEW STUFF
 
   leaveGame = (gameToken, userId) => {
-    removePlayer(gameToken, userId)
+    api
+      .removePlayer(gameToken, userId)
       .then(() => {
         this.setState({
           gameToken: null,
@@ -69,15 +90,5 @@ class App extends Component {
       });
   };
 }
-
-//********   ./api.js   ********
-const removePlayer = async (token, userId) => {
-  const db = firebase.firestore();
-
-  return await db
-    .collection(token)
-    .doc(userId)
-    .delete();
-};
 
 export default App;

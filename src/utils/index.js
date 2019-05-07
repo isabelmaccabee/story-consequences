@@ -15,7 +15,7 @@ utils.orderUserIds = (usersArr, currentUserId) => {
   const sortedUsers = usersArr.sort();
   baseObj.orderedUsers.push(...sortedUsers);
 
-  const index = usersArr.findIndex(id => id === currentUserId);
+  const index = sortedUsers.findIndex(id => id === currentUserId);
   baseObj.currentUserPosition = index === -1 ? null : index + 1;
   return baseObj;
 };

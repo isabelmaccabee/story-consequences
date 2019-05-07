@@ -4,13 +4,8 @@ import GameCreate from "./GameCreate";
 import GameJoin from "./GameJoin";
 import Header from "./Header";
 
-const StartUpWrapper = ({
-  gameToken,
-  userPosition,
-  children,
-  addGameConfigs
-}) => {
-  if (gameToken && userPosition) return children;
+const StartUpWrapper = ({ gameToken, children, addGameConfigs }) => {
+  if (gameToken) return children;
   else
     return (
       <div id="startPage">
