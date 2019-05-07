@@ -31,3 +31,11 @@ export const joinGame = async (tokenInput, nameInput) => {
     name: nameInput
   });
 };
+
+export const getGameInfo = async tokenInput => {
+  const info = await db
+    .collection(tokenInput)
+    .doc("gameInfo")
+    .get();
+  return info.data();
+};

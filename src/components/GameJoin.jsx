@@ -8,7 +8,6 @@ class GameJoin extends Component {
   };
   render() {
     const { tokenInput, nameInput } = this.state;
-    console.log(this.state);
     return (
       <div className="bottomHalf">
         <form onSubmit={this.handleSubmit}>
@@ -46,13 +45,21 @@ class GameJoin extends Component {
       .checkGameExists(tokenInput)
       .then(response => {
         if (!response.empty) {
-          return api.joinGame(tokenInput, nameInput);
+          return Promise.all([
+            api.joinGame(tokenInput, nameInput),
+            api.getGameInfo(tokenInput)
+          ]);
         } else {
           return Promise.reject({ msg: "game didn't exist" });
         }
       })
-      .then(addedUser => {
-        this.props.addGameConfigs(tokenInput, 3, addedUser.id);
+      .then(([addedUser, gameInfo]) => {
+        console.log(gameInfo.numOfPlayers);
+        this.props.addGameConfigs(
+          tokenInput,
+          +gameInfo.numOfPlayers,
+          addedUser.id
+        );
       })
       .catch(err => {
         console.log("err", err.msg);
