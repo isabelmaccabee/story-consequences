@@ -6,7 +6,8 @@ import * as api from "../api";
 class PrevAnswer extends Component {
   state = {
     prevAnswer: null,
-    currentThreadLength: 0
+    currentThreadLength: 0,
+    isLoading: true
   };
 
   componentDidMount() {
@@ -25,19 +26,26 @@ class PrevAnswer extends Component {
       this.state.currentThreadLength === this.props.turnNum - 1 &&
       this.state.currentThreadLength !== prevState.currentThreadLength
     ) {
-      this.fetchPrevAnswer();
+      this.setState({ isLoading: true }, () => {
+        this.fetchPrevAnswer();
+      });
     }
   }
 
   render() {
-    console.log(this.state);
+    const { prevAnswer, isLoading } = this.state;
+    console.log(prevAnswer);
     return (
       <div className="topHalf">
-        <p>previous answer from thread {this.props.currentThread}</p>
-        {this.props.turnNum % 2 !== 0 ? (
-          <Canvas disabled saveData={localStorage.getItem("pastDrawing")} />
-        ) : (
-          <p>{this.state.prevAnswer}</p>
+        {!isLoading && (
+          <div>
+            <p>previous answer from thread {this.props.currentThread}</p>
+            {this.props.turnNum % 2 !== 0 ? (
+              <Canvas disabled saveData={prevAnswer} />
+            ) : (
+              <p>{prevAnswer}</p>
+            )}
+          </div>
         )}
       </div>
     );
@@ -47,7 +55,8 @@ class PrevAnswer extends Component {
     const { turnNum, currentThread, gameToken } = this.props;
     api.getPrevAnswer(turnNum, currentThread, gameToken).then(res => {
       const { input } = res.data();
-      this.setState({ prevAnswer: input });
+      console.log(input);
+      this.setState({ prevAnswer: input, isLoading: false });
     });
   };
 }
