@@ -11,32 +11,28 @@ class PrevAnswer extends Component {
   };
 
   componentDidMount() {
-    // const { currentThread, gameToken } = this.props;
-    // const db = firebase.firestore();
-    // db.collection(gameToken)
-    //   .doc(currentThread)
-    //   .collection("thread")
-    //   .onSnapshot(({ docs }) => {
-    //     this.setState({ currentThreadLength: docs.length });
-    //   });
     this.listenToDatabase();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevState);
     if (
       this.state.currentThreadLength === this.props.turnNum - 1 &&
       this.state.currentThreadLength !== prevState.currentThreadLength
     ) {
-      console.log("line 32");
       this.setState({ isLoading: true }, () => {
         this.fetchPrevAnswer();
       });
     }
     if (prevProps.currentThread !== this.props.currentThread) {
-      this.setState({ isLoading: true }, () => {
-        this.listenToDatabase();
-      });
+      this.setState(
+        prevState => ({
+          isLoading: true,
+          currentThreadLength: prevState.currentThreadLength - 1
+        }),
+        () => {
+          this.listenToDatabase();
+        }
+      );
     }
   }
 
@@ -44,7 +40,7 @@ class PrevAnswer extends Component {
     const { prevAnswer, isLoading } = this.state;
     return (
       <div className="topHalf">
-        {/* {!isLoading && (
+        {!isLoading && (
           <div>
             <p>previous answer from thread {this.props.currentThread}</p>
             {this.props.turnNum % 2 !== 0 ? (
@@ -53,7 +49,7 @@ class PrevAnswer extends Component {
               <p>{prevAnswer}</p>
             )}
           </div>
-        )} */}
+        )}
       </div>
     );
   }
@@ -61,10 +57,7 @@ class PrevAnswer extends Component {
   fetchPrevAnswer = () => {
     const { turnNum, currentThread, gameToken } = this.props;
     api.getPrevAnswer(turnNum, currentThread, gameToken).then(res => {
-      console.log(res);
-      const data = res.data();
-      console.log(data);
-      const { input } = data;
+      const { input } = res.data();
       this.setState({ prevAnswer: input, isLoading: false });
     });
   };
