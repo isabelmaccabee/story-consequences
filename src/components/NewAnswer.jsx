@@ -36,14 +36,14 @@ class NewAnswer extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { gameToken, userId, turnNum, currentThreadIndex } = this.props;
+    const { gameToken, userId, turnNum, currentThread } = this.props;
     const input =
       turnNum % 2 === 0 ? this.state.drawInput : this.state.textInput;
     api
       .sendThreadInput(
         input,
         turnNum,
-        currentThreadIndex || userId,
+        currentThread || userId,
         gameToken,
         userId
       )
