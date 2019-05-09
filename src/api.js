@@ -84,10 +84,10 @@ export const getPrevAnswer = async (turnNum, currentThread, gameToken) => {
     .get();
 };
 
-export const getAllThreads = async (allUsers, gameToken) => {
+export const getOneFullThread = async (userId, gameToken) => {
   return await db
     .collection(gameToken)
-    .doc(allUsers[0])
+    .doc(userId)
     .collection("thread")
     .get();
 };

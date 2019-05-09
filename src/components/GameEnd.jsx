@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as api from "../api";
+import SingleThread from "./SingleThread";
 
 class GameEnd extends Component {
   state = {
@@ -8,13 +9,14 @@ class GameEnd extends Component {
 
   componentDidMount() {
     const { allUsers, gameToken } = this.props;
-    console.log(gameToken);
-    api.getAllThreads(allUsers, gameToken).then(response => {
-      const firstObj = {
+    Promise.all(
+      allUsers.map(userId => api.getOneFullThread(userId, gameToken))
+    ).then(([response]) => {
+      const threadsByUser = {
         [allUsers[0]]: []
       };
-      response.forEach(doc => firstObj[allUsers[0]].push(doc.data()));
-      console.log(firstObj);
+      response.forEach(doc => threadsByUser[allUsers[0]].push(doc.data()));
+      this.setState({ threads: threadsByUser });
     });
   }
 
@@ -23,7 +25,19 @@ class GameEnd extends Component {
     return (
       <div>
         <p>end of game</p>
-        {threads && <p>got stuff</p>}
+        {threads && (
+          <div>
+            {Object.keys(threads).map(threadId => {
+              return (
+                <SingleThread
+                  key={threadId}
+                  threadId={threadId}
+                  fullThread={threads[threadId]}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }
