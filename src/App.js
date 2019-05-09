@@ -18,8 +18,13 @@ class App extends Component {
   };
 
   render() {
-    const { gameToken, userPosition, numOfPlayers, userId } = this.state;
-    console.log(this.state);
+    const {
+      gameToken,
+      userPosition,
+      numOfPlayers,
+      userId,
+      allUsers
+    } = this.state;
     return (
       <div>
         <StartUpWrapper
@@ -42,6 +47,9 @@ class App extends Component {
                 path="/game-play"
                 numOfPlayers={numOfPlayers}
                 userPosition={userPosition}
+                gameToken={gameToken}
+                allUsers={allUsers}
+                userId={userId}
               />
             </Router>
           </div>

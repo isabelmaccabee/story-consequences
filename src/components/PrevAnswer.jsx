@@ -1,22 +1,79 @@
 import React, { Component } from "react";
 import Canvas from "react-canvas-draw";
+import firebase from "../firebase";
+import * as api from "../api";
 
 class PrevAnswer extends Component {
-  // on mount, makes db request to get the right thread,
-  // and more specifically the entry at turnNum -1
+  state = {
+    prevAnswer: null,
+    currentThreadLength: 0,
+    isLoading: true
+  };
+
+  componentDidMount() {
+    this.listenToDatabase();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.currentThreadLength === this.props.turnNum - 1 &&
+      this.state.currentThreadLength !== prevState.currentThreadLength
+    ) {
+      this.setState({ isLoading: true }, () => {
+        this.fetchPrevAnswer();
+      });
+    }
+    if (prevProps.currentThread !== this.props.currentThread) {
+      this.setState(
+        prevState => ({
+          isLoading: true,
+          currentThreadLength: prevState.currentThreadLength - 1
+        }),
+        () => {
+          this.listenToDatabase();
+        }
+      );
+    }
+  }
 
   render() {
+    const { prevAnswer, isLoading } = this.state;
     return (
       <div className="topHalf">
-        <p>previous answer from thread {this.props.currentThread}</p>
-        {this.props.turnNum % 2 === 0 ? (
-          <Canvas disabled saveData={localStorage.getItem("pastDrawing")} />
+        {!isLoading ? (
+          <div>
+            <p>previous answer from thread {this.props.currentThread}</p>
+            {this.props.turnNum % 2 !== 0 ? (
+              <Canvas disabled saveData={prevAnswer} />
+            ) : (
+              <p>{prevAnswer}</p>
+            )}
+          </div>
         ) : (
-          <p>Text here text here</p>
+          <p>Waiting for another player's response</p>
         )}
       </div>
     );
   }
+
+  fetchPrevAnswer = () => {
+    const { turnNum, currentThread, gameToken } = this.props;
+    api.getPrevAnswer(turnNum, currentThread, gameToken).then(res => {
+      const { input } = res.data();
+      this.setState({ prevAnswer: input, isLoading: false });
+    });
+  };
+
+  listenToDatabase = () => {
+    const { currentThread, gameToken } = this.props;
+    const db = firebase.firestore();
+    db.collection(gameToken)
+      .doc(currentThread)
+      .collection("thread")
+      .onSnapshot(({ docs }) => {
+        this.setState({ currentThreadLength: docs.length });
+      });
+  };
 }
 
 export default PrevAnswer;
