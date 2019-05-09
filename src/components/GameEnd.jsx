@@ -11,12 +11,8 @@ class GameEnd extends Component {
     const { allUsers, gameToken } = this.props;
     Promise.all(
       allUsers.map(userId => api.getOneFullThread(userId, gameToken))
-    ).then(([response]) => {
-      const threadsByUser = {
-        [allUsers[0]]: []
-      };
-      response.forEach(doc => threadsByUser[allUsers[0]].push(doc.data()));
-      this.setState({ threads: threadsByUser });
+    ).then(responses => {
+      this.addThreadsToState(responses);
     });
   }
 
@@ -41,6 +37,20 @@ class GameEnd extends Component {
       </div>
     );
   }
+
+  addThreadsToState = allResponses => {
+    const threadsByUser = {};
+    allResponses.forEach(response => {
+      response.forEach(doc => {
+        const threadId = doc.ref.parent.parent.id;
+        const threadData = doc.data();
+        if (threadsByUser[threadId]) threadsByUser[threadId].push(threadData);
+        else threadsByUser[threadId] = [threadData];
+      });
+    });
+
+    this.setState({ threads: threadsByUser });
+  };
 }
 
 export default GameEnd;

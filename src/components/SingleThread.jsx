@@ -9,7 +9,7 @@ const SingleThread = props => {
       <ul>
         {props.fullThread.map((submission, index) => {
           return (
-            <li>
+            <li key={index}>
               {index % 2 === 0 ? (
                 <p>{submission.input}</p>
               ) : (
