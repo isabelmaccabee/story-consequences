@@ -7,6 +7,7 @@ import PlayScreen from "./components/PlayScreen";
 import Header from "./components/Header";
 import * as api from "./api";
 import * as utils from "./utils/index";
+import GameEnd from "./components/GameEnd";
 
 class App extends Component {
   state = {
@@ -50,6 +51,11 @@ class App extends Component {
                 gameToken={gameToken}
                 allUsers={allUsers}
                 userId={userId}
+              />
+              <GameEnd
+                path="/game-end"
+                gameToken={gameToken}
+                allUsers={allUsers}
               />
             </Router>
           </div>
