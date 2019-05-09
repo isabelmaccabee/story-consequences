@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NewAnswer from "./NewAnswer";
 import PrevAnswer from "./PrevAnswer";
 import utils from "../utils";
+import { navigate } from "@reach/router";
 
 class PlayScreen extends Component {
   state = {
@@ -37,14 +38,21 @@ class PlayScreen extends Component {
 
   advanceTurn = () => {
     const { numOfPlayers, userPosition } = this.props;
-    this.setState(prevState => {
-      const nextThread = utils.findNextThread(
-        prevState.currentThreadIndex,
-        numOfPlayers,
-        userPosition
-      );
-      return { turnNum: prevState.turnNum + 1, currentThreadIndex: nextThread };
-    });
+    if (this.state.turnNum === 2) {
+      navigate("/game-end");
+    } else {
+      this.setState(prevState => {
+        const nextThread = utils.findNextThread(
+          prevState.currentThreadIndex,
+          numOfPlayers,
+          userPosition
+        );
+        return {
+          turnNum: prevState.turnNum + 1,
+          currentThreadIndex: nextThread
+        };
+      });
+    }
   };
 }
 

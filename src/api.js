@@ -22,7 +22,7 @@ export const makeGameInfoDoc = async (tokenInput, numOfPlayers) => {
     });
 };
 
-export const checkGameExists = async (tokenInput) => {
+export const checkGameExists = async tokenInput => {
   return await db.collection(tokenInput).get();
 };
 
@@ -33,7 +33,7 @@ export const joinGame = async (tokenInput, nameInput) => {
   });
 };
 
-export const getGameInfo = async (tokenInput) => {
+export const getGameInfo = async tokenInput => {
   const info = await db
     .collection(tokenInput)
     .doc("gameInfo")
@@ -55,7 +55,7 @@ export const updateReadiness = async (token, userId, isReady) => {
     .update({ isReady: isReady });
 };
 
-export const getReadyPlayers = async (token) => {
+export const getReadyPlayers = async token => {
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
 };
@@ -81,5 +81,13 @@ export const getPrevAnswer = async (turnNum, currentThread, gameToken) => {
     .doc(currentThread)
     .collection("thread")
     .doc(`${turnNum - 1}`)
+    .get();
+};
+
+export const getAllThreads = async (allUsers, gameToken) => {
+  return await db
+    .collection(gameToken)
+    .doc(allUsers[0])
+    .collection("thread")
     .get();
 };
