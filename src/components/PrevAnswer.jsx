@@ -40,7 +40,7 @@ class PrevAnswer extends Component {
     const { prevAnswer, isLoading } = this.state;
     return (
       <div className="topHalf">
-        {!isLoading && (
+        {!isLoading ? (
           <div>
             <p>previous answer from thread {this.props.currentThread}</p>
             {this.props.turnNum % 2 !== 0 ? (
@@ -49,6 +49,8 @@ class PrevAnswer extends Component {
               <p>{prevAnswer}</p>
             )}
           </div>
+        ) : (
+          <p>Waiting for another player's response</p>
         )}
       </div>
     );
