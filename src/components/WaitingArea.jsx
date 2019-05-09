@@ -5,10 +5,12 @@ import * as api from "../api.js";
 class WaitingArea extends Component {
   state = {
     currentNumOfPlayers: 1,
-    isReady: false
+    isReady: false,
+    players: []
   };
   render() {
     const { numOfPlayers, leaveGame, gameToken, userId } = this.props;
+    const { players } = this.state;
     return (
       <div className="main">
         {gameToken && <h2>{gameToken}</h2>}
@@ -17,6 +19,13 @@ class WaitingArea extends Component {
           number of people in the room :{this.state.currentNumOfPlayers}/
           {numOfPlayers}
         </p>
+        <ul>
+          {players.map((player) => {
+            const readyIndicator = player.isReady ? "✅" : "❌";
+            return <li>{`${player.name} ${readyIndicator}`}</li>;
+          })}
+          <li />
+        </ul>
         <button onClick={() => leaveGame(gameToken, userId)}>leave game</button>
         <button onClick={this.setReadiness}>ready</button>
       </div>
@@ -26,7 +35,19 @@ class WaitingArea extends Component {
   componentDidMount() {
     const db = firebase.firestore();
     db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
-      this.setState({ currentNumOfPlayers: docs.length - 1 });
+      const updatedPlayers = docs
+        .map((doc) => {
+          const { name, isReady } = doc.data();
+          return { name, isReady };
+        })
+        .filter((obj) => !Object.values(obj).includes(undefined));
+      this.setState((prevState) => {
+        return {
+          ...prevState,
+          currentNumOfPlayers: docs.length - 1,
+          players: updatedPlayers
+        };
+      });
     });
   }
   componentDidUpdate() {
@@ -35,13 +56,13 @@ class WaitingArea extends Component {
     if (isReady && currentNumOfPlayers === +numOfPlayers) {
       api
         .getReadyPlayers(gameToken)
-        .then(res => {
+        .then((res) => {
           if (res.docs.length === +numOfPlayers) {
-            const idsOnly = res.docs.map(doc => doc.id);
+            const idsOnly = res.docs.map((doc) => doc.id);
             addUsersList(idsOnly);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("somehting went wrong", err);
         });
     }
@@ -52,7 +73,7 @@ class WaitingArea extends Component {
     const { gameToken, userId } = this.props;
     const { isReady } = this.state;
     api.updateReadiness(gameToken, userId, !isReady);
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { ...prevState, isReady: !prevState.isReady };
     });
   };
