@@ -56,6 +56,8 @@ class App extends Component {
                 path="/game-end"
                 gameToken={gameToken}
                 allUsers={allUsers}
+                userId={userId}
+                numOfPlayers={numOfPlayers}
               />
             </Router>
           </div>
@@ -81,7 +83,7 @@ class App extends Component {
   };
 
   addGameConfigs = (gameToken, numOfPlayers, userId) => {
-    this.setState({ gameToken, numOfPlayers, userId }, () => {
+    this.setState({ gameToken, numOfPlayers: +numOfPlayers, userId }, () => {
       navigate("/waiting-area");
     });
   };

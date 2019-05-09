@@ -54,10 +54,21 @@ export const updateReadiness = async (token, userId, isReady) => {
     .doc(userId)
     .update({ isReady: isReady });
 };
-
+//can collate the above probs
+export const updateFinishedness = async (token, userId) => {
+  return await db
+    .collection(token)
+    .doc(userId)
+    .update({ isFinished: true });
+};
 export const getReadyPlayers = async token => {
   const players = db.collection(token);
   return await players.where("isReady", "==", true).get();
+};
+// can collate the above probs
+export const getFinishedPlayers = async token => {
+  const players = db.collection(token);
+  return await players.where("isFinished", "==", true).get();
 };
 
 export const sendThreadInput = async (

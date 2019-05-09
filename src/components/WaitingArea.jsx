@@ -20,7 +20,7 @@ class WaitingArea extends Component {
           {numOfPlayers}
         </p>
         <ul>
-          {players.map((player) => {
+          {players.map(player => {
             const readyIndicator = player.isReady ? "✅" : "❌";
             return <li>{`${player.name} ${readyIndicator}`}</li>;
           })}
@@ -36,12 +36,12 @@ class WaitingArea extends Component {
     const db = firebase.firestore();
     db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
       const updatedPlayers = docs
-        .map((doc) => {
+        .map(doc => {
           const { name, isReady } = doc.data();
           return { name, isReady };
         })
-        .filter((obj) => !Object.values(obj).includes(undefined));
-      this.setState((prevState) => {
+        .filter(obj => !Object.values(obj).includes(undefined));
+      this.setState(prevState => {
         return {
           ...prevState,
           currentNumOfPlayers: docs.length - 1,
@@ -56,24 +56,28 @@ class WaitingArea extends Component {
     if (isReady && currentNumOfPlayers === +numOfPlayers) {
       api
         .getReadyPlayers(gameToken)
-        .then((res) => {
+        .then(res => {
           if (res.docs.length === +numOfPlayers) {
-            const idsOnly = res.docs.map((doc) => doc.id);
+            const idsOnly = res.docs.map(doc => doc.id);
             addUsersList(idsOnly);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("somehting went wrong", err);
         });
     }
   }
-  //probs need a componentDidUnmount
+
+  componentDidUnmount() {
+    const db = firebase.firestore();
+    db.collection(this.props.gameToken).onSnapshot(() => {});
+  }
 
   setReadiness = () => {
     const { gameToken, userId } = this.props;
     const { isReady } = this.state;
     api.updateReadiness(gameToken, userId, !isReady);
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return { ...prevState, isReady: !prevState.isReady };
     });
   };

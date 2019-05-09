@@ -1,55 +1,49 @@
 import React, { Component } from "react";
+import firebase from "../firebase";
 import * as api from "../api";
-import SingleThread from "./SingleThread";
+import FinalThreads from "./FinalThreads";
 
 class GameEnd extends Component {
   state = {
-    threads: null
+    finishedCount: 0
   };
 
   componentDidMount() {
-    const { allUsers, gameToken } = this.props;
-    Promise.all(
-      allUsers.map(userId => api.getOneFullThread(userId, gameToken))
-    ).then(responses => {
-      this.addThreadsToState(responses);
+    const { gameToken, userId } = this.props;
+    api.updateFinishedness(gameToken, userId).then(() => {
+      this.listenForFinished();
     });
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.finishedCount, this.props.numOfPlayers);
   }
 
   render() {
-    const { threads } = this.state;
-    return (
-      <div>
-        <p>end of game</p>
-        {threads && (
-          <div>
-            {Object.keys(threads).map(threadId => {
-              return (
-                <SingleThread
-                  key={threadId}
-                  threadId={threadId}
-                  fullThread={threads[threadId]}
-                />
-              );
-            })}
-          </div>
-        )}
-      </div>
+    const { numOfPlayers, gameToken, allUsers } = this.props;
+    const { finishedCount } = this.state;
+    return finishedCount === numOfPlayers ? (
+      <FinalThreads gameToken={gameToken} allUsers={allUsers} />
+    ) : (
+      <p>Just waiting for others to finish!</p>
     );
   }
 
-  addThreadsToState = allResponses => {
-    const threadsByUser = {};
-    allResponses.forEach(response => {
-      response.forEach(doc => {
-        const threadId = doc.ref.parent.parent.id;
-        const threadData = doc.data();
-        if (threadsByUser[threadId]) threadsByUser[threadId].push(threadData);
-        else threadsByUser[threadId] = [threadData];
+  listenForFinished = () => {
+    const db = firebase.firestore();
+    db.collection(this.props.gameToken).onSnapshot(({ docs }) => {
+      const updatedPlayers = docs
+        .map(doc => {
+          const { name, isFinished } = doc.data();
+          return { name, isFinished };
+        })
+        .filter(obj => !Object.values(obj).includes(undefined));
+      this.setState(prevState => {
+        return {
+          finishedCount: updatedPlayers.length
+        };
       });
     });
-
-    this.setState({ threads: threadsByUser });
   };
 }
 
