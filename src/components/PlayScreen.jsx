@@ -38,7 +38,7 @@ class PlayScreen extends Component {
 
   advanceTurn = () => {
     const { numOfPlayers, userPosition } = this.props;
-    if (this.state.turnNum === 2) {
+    if (this.state.turnNum === 5) {
       navigate("/game-end");
     } else {
       this.setState(prevState => {
