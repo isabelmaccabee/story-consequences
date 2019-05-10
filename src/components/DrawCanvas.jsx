@@ -10,10 +10,13 @@ class DrawCanvas extends Component {
 
   render() {
     const { brushRadius, brushColour } = this.state;
-    console.log(brushColour, brushRadius);
     return (
       <>
-        <BrushOptions updateBrushOptions={this.updateBrushOptions} />
+        <BrushOptions
+          updateBrushOptions={this.updateBrushOptions}
+          brushRadius={brushRadius}
+          brushColour={brushColour}
+        />
         <div onMouseUp={this.handleMouseUp}>
           <Canvas
             ref={cD => (this.saveableCanvas = cD)}
